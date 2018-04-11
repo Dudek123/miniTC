@@ -25,7 +25,12 @@ namespace miniTC
 
             panelMiniTCLeft.UpdateDrives += new EventHandler(miniTCPanel_UpdateDrives);
             panelMiniTCRight.UpdateDrives += new EventHandler(miniTCPanel_UpdateDrives);
+
+            panelMiniTCLeft.ButtonBackClick += new EventHandler(miniTCPanel_GetPreviousFolder);
+            panelMiniTCRight.ButtonBackClick += new EventHandler(miniTCPanel_GetPreviousFolder);
         }
+
+        
 
         #region INTERFEJS
         public List<string> Drives
@@ -95,7 +100,15 @@ namespace miniTC
         }
 
         public event Func<List<string>> GetDrives;
+        public event Func<string, List<string>> GetItems;
+        public event Func<string, string> GetPreviousFolder;
         #endregion
+
+        private void miniTCPanel_GetPreviousFolder(object sender, EventArgs e)
+        {
+            ((Views.PanelMiniTC)sender).CurrentPath = GetPreviousFolder(((Views.PanelMiniTC)sender).CurrentPath);
+            ((Views.PanelMiniTC)sender).Items = GetItems(((Views.PanelMiniTC)sender).CurrentPath);
+        }
 
         private void miniTCPanel_UpdateDrives(object sender, EventArgs e)
         {
@@ -104,12 +117,12 @@ namespace miniTC
 
         private void miniTCPanel_ListBoxDoubleClick(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            ((Views.PanelMiniTC)sender).Items = GetItems(((Views.PanelMiniTC)sender).CurrentPath);
         }
 
         private void miniTCPanel_ComboBoxDrivesSelectedIndexChanged(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            ((Views.PanelMiniTC)sender).Items = GetItems(((Views.PanelMiniTC)sender).CurrentPath);
         }
 
         private void miniTCView_Load(object sender, EventArgs e)

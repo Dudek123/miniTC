@@ -12,11 +12,12 @@ namespace miniTC.Views
 {
     public partial class PanelMiniTC : UserControl
     {
+
         public PanelMiniTC()
         {
             InitializeComponent();
         }
-
+        #region WŁAŚCIWOŚCI
         public List<string> Drives
         {
             get
@@ -83,21 +84,28 @@ namespace miniTC.Views
                     return "";
             }
         }
+        #endregion
 
-        private void buttonBack_Click(object sender, EventArgs e)
-        {
-
-        }
+        
 
         public event EventHandler ComboBoxDrivesSelectedIndexChanged;
         public event EventHandler ListBoxDoubleClick;
         public event EventHandler UpdateDrives;
+        public event EventHandler ButtonBackClick;
+
+        private void buttonBack_Click(object sender, EventArgs e)
+        {
+            if (this.ButtonBackClick != null)
+            {
+                this.ButtonBackClick(this, e);
+            }
+        }
 
         private void comboBoxDrives_SelectedIndexChanged(object sender, EventArgs e)
         {
-            CurrentPath = comboBoxDrives.SelectedItem.ToString();
+            CurrentPath = comboBoxDrives.Items[comboBoxDrives.SelectedIndex].ToString();
             if (this.ComboBoxDrivesSelectedIndexChanged != null)
-                this.ComboBoxDrivesSelectedIndexChanged(sender, e);
+                this.ComboBoxDrivesSelectedIndexChanged(this, e);
         }
 
         private void listBoxItems_DoubleClick(object sender, EventArgs e)
@@ -106,8 +114,7 @@ namespace miniTC.Views
             {
                 if(this.SelectedItem != null)
                 {
-                    CurrentPath += listBoxItems.SelectedItem.ToString();
-                    this.ListBoxDoubleClick(sender, e);
+                    this.ListBoxDoubleClick(this, e);
                 }
             }
         }
@@ -116,6 +123,25 @@ namespace miniTC.Views
         {
             if (this.UpdateDrives != null)
                 this.UpdateDrives(this, e);
+        }
+
+        private void listBoxItems_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            List<string> allItems = new List<string>();
+            allItems = Items;         
+            string path = CurrentPath;
+           
+
+            foreach(string item in allItems)
+            {
+                if(path.EndsWith(item))
+                {
+                    path = path.Remove(path.Length-item.Length,item.Length);
+                }
+            }
+
+            path += listBoxItems.SelectedItem.ToString();
+            CurrentPath = path;
         }
     }
 }

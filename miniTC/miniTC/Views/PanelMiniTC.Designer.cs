@@ -69,6 +69,7 @@
             this.listBoxItems.Name = "listBoxItems";
             this.listBoxItems.Size = new System.Drawing.Size(377, 446);
             this.listBoxItems.TabIndex = 3;
+            this.listBoxItems.SelectedIndexChanged += new System.EventHandler(this.listBoxItems_SelectedIndexChanged);
             this.listBoxItems.DoubleClick += new System.EventHandler(this.listBoxItems_DoubleClick);
             // 
             // PanelMiniTC
