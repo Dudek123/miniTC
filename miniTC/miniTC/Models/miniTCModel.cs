@@ -8,10 +8,12 @@ namespace miniTC.Models
 {
     public class miniTCModel
     {
+        #region POLA MODELU
         private List<string> drives;
         private List<string> items;
         private string path;
         private string previousPath;
+        #endregion
 
         #region WŁAŚCIWOŚCI
         public List<string> Drives
@@ -61,7 +63,11 @@ namespace miniTC.Models
         }
         #endregion
 
+        #region KONSTRUKTOR
         public miniTCModel() { }
+        #endregion
+
+        #region METODY PUBLICZNE MODELU
 
         public List<string> GetDrives()
         {
@@ -102,10 +108,46 @@ namespace miniTC.Models
             }
             else if(System.IO.File.Exists(path))
             {
-                System.Diagnostics.Process.Start(path);
+                //System.Diagnostics.Process.Start(path);
             }
             return Items;
         }
+
+        public bool Copy(string arg1, string arg2)
+        {
+            return copy(arg1, arg2);
+        }
+
+        public bool Move(string arg1, string arg2)
+        {
+            return move(arg1, arg2);
+        }
+
+        public bool Delete(string path)
+        {
+            return delete(path);
+        }
+
+        public string GetPreviousFolder(string path)
+        {
+            int a;
+            if (path.Length == 3)
+            {
+                PreviousPath = path;
+                return PreviousPath;
+            }
+            if (path.EndsWith("\\"))
+            {
+                path = path.Remove(path.Length - 1, 1);
+            }
+            a = path.LastIndexOf('\\');
+            path = path.Remove(a + 1, path.Length - (a + 1));
+            PreviousPath = path;
+            return PreviousPath;
+        }
+        #endregion
+
+        #region METODY PRYWATNE MODELU
 
         private void updateDrives()
         {
@@ -120,23 +162,188 @@ namespace miniTC.Models
             }
             Drives = readyDrives;
         }
-        
-        public string GetPreviousFolder(string path)
+
+        private bool copy(string source, string dest)
         {
-            int a;
-            if(path.Length == 3)
+            if(source == "" || dest == "") // puste ścieżki
             {
-                PreviousPath = path;
-                return PreviousPath;
+                System.Windows.Forms.MessageBox.Show("Wybierz co i gdzie chcesz skopiować");
+                return false;
             }
-            if(path.EndsWith("\\"))
+            string sourceName;
+            string destFolder;
+            string destPath;
+         
+            destFolder = System.IO.Path.GetDirectoryName(dest);
+
+            if (dest.Length == 3) // katalog główny dysku
+                destFolder = dest;
+            
+            if (source.Contains(".")) //plik do folderu
             {
-                path = path.Remove(path.Length - 1, 1);
+                sourceName = System.IO.Path.GetFileName(source);
+                destPath = System.IO.Path.Combine(destFolder, sourceName);
+
+                if(!System.IO.File.Exists(destPath))
+                {
+                    try
+                    {
+                        System.IO.File.Copy(source, destPath);
+                    }
+                    catch(UnauthorizedAccessException)
+                    {
+                        System.Windows.Forms.MessageBox.Show("Brak uprawnień do kopiowanego pliku");
+                        return false;
+                    }
+                    
+                    return true;
+                }
+                else
+                    System.Windows.Forms.MessageBox.Show("Taki plik już istnieje w lokalizacji docelowej");
             }
-            a = path.LastIndexOf('\\');
-            path = path.Remove(a + 1, path.Length - (a + 1));
-            PreviousPath = path;
-            return PreviousPath;
+            else //folder do folderu
+            {
+                if(source.Length == 3)
+                {
+                    System.Windows.Forms.MessageBox.Show("Wybierz coś do skopiowania");
+                    return false;
+                }
+                sourceName = System.IO.Path.GetDirectoryName(source).Remove(0, System.IO.Path.GetDirectoryName(source).LastIndexOf('\\') + 1);
+                destPath = System.IO.Path.Combine(destFolder, sourceName);
+
+                if(!System.IO.Directory.Exists(destPath))
+                {
+                    try
+                    {
+                        System.IO.Directory.CreateDirectory(destPath);
+                        foreach (string item in System.IO.Directory.GetFileSystemEntries(source))
+                        {
+                            if (System.IO.Directory.Exists(item))
+                            {
+                                System.IO.Directory.CreateDirectory(System.IO.Path.Combine(destPath, System.IO.Path.GetDirectoryName(item)));
+                                copy(item + "\\", destPath + "\\");
+                            }
+                            else
+                                copy(item, destPath + "\\" + System.IO.Path.GetFileName(item));
+                        }
+                        return true;
+                    }
+                    catch(UnauthorizedAccessException)
+                    {
+                        System.Windows.Forms.MessageBox.Show("Brak dostępu do folderu lub pliku.");
+                        System.IO.Directory.Delete(dest);
+                        return false;
+                    }                  
+                }
+                else
+                    System.Windows.Forms.MessageBox.Show("Taki folder już istnieje w lokalizacji docelowej"); 
+            }
+            return false;
         }
+
+        private bool move(string arg1, string arg2)
+        {
+
+            if (arg1 == "" || arg2 == "") // puste ścieżki
+            {
+                System.Windows.Forms.MessageBox.Show("Wybierz co i gdzie chcesz przenieść");
+                return false;
+            }
+
+            string sourceName;
+            string destPath;
+            string destFolder;
+
+            destFolder = System.IO.Path.GetDirectoryName(arg2);
+
+            if (arg2.Length == 3) // katalog główny dysku
+                destFolder = arg2;
+
+            if (System.IO.File.Exists(arg1)) //przenoszenie pliku
+            {
+                sourceName = System.IO.Path.GetFileName(arg1);
+                destPath = System.IO.Path.Combine(destFolder, sourceName);
+
+                if(!System.IO.File.Exists(destPath))
+                {
+                    try
+                    {
+                        System.IO.File.Move(arg1, destPath);
+                        return true;
+                    }
+                    catch(UnauthorizedAccessException)
+                    {
+                        System.Windows.Forms.MessageBox.Show("Brak uprawnień");
+                        return false;
+                    }
+                }
+                else
+                {
+                    System.Windows.Forms.MessageBox.Show("Taki plik już istnieje w lokalizacji docelowej");
+                    return false;
+                }
+            }
+            else if(System.IO.Directory.Exists(arg1)) //przenoszenie folderu
+            {
+                sourceName = System.IO.Path.GetDirectoryName(arg1).Remove(0, System.IO.Path.GetDirectoryName(arg1).LastIndexOf('\\') + 1);
+                destPath = System.IO.Path.Combine(destFolder, sourceName);
+
+                if(!System.IO.Directory.Exists(destPath))
+                {
+                    try
+                    {
+                        System.IO.Directory.Move(arg1, destPath);
+                        return true;
+                    }
+                    catch(UnauthorizedAccessException)
+                    {
+                        System.Windows.Forms.MessageBox.Show("Brak uprawnień");
+                        return false;
+                    }
+                }
+                else
+                {
+                    System.Windows.Forms.MessageBox.Show("Taki folder już istnieje w lokalizacji docelowej");
+                    return false;
+                }
+            }
+            return false;
+        }
+
+        private bool delete(string path)
+        {
+            if(System.IO.File.Exists(path)) // usuwanie pliku
+            {
+                try
+                {
+                    System.IO.File.Delete(path);
+                    return true;
+                }
+                catch(UnauthorizedAccessException)
+                {
+                    System.Windows.Forms.MessageBox.Show("Brak uprawnień");
+                    return false;
+                }
+            }
+            else if(System.IO.Directory.Exists(path)) // usuwanie katalogu
+            {
+                try
+                {
+                    System.IO.Directory.Delete(path, true);
+                    return true;
+                }
+                catch (UnauthorizedAccessException)
+                {
+                    System.Windows.Forms.MessageBox.Show("Brak uprawnień");
+                    return false;
+                }
+            }
+            else
+            {
+                System.Windows.Forms.MessageBox.Show("Nie ma takiego pliku ani katalogu");
+                return false;
+            }    
+        }
+        #endregion
     }
 }

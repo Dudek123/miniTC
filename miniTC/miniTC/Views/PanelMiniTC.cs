@@ -12,12 +12,15 @@ namespace miniTC.Views
 {
     public partial class PanelMiniTC : UserControl
     {
-
+        #region KONSTRUKTOR
         public PanelMiniTC()
         {
             InitializeComponent();
         }
-        #region WŁAŚCIWOŚCI
+        #endregion
+
+        #region WŁAŚCIWOŚCI PANELU
+
         public List<string> Drives
         {
             get
@@ -60,6 +63,17 @@ namespace miniTC.Views
             }
         }
 
+        public bool IsSelectedItem
+        {
+            get
+            {
+                if (listBoxItems.SelectedIndex == -1)
+                    return false;
+                else
+                    return true;
+            }
+        }
+
         public string CurrentPath
         {
             get
@@ -86,12 +100,12 @@ namespace miniTC.Views
         }
         #endregion
 
-        
-
+        #region EVENTY PANELU
         public event EventHandler ComboBoxDrivesSelectedIndexChanged;
         public event EventHandler ListBoxDoubleClick;
         public event EventHandler UpdateDrives;
         public event EventHandler ButtonBackClick;
+        
 
         private void buttonBack_Click(object sender, EventArgs e)
         {
@@ -124,24 +138,6 @@ namespace miniTC.Views
             if (this.UpdateDrives != null)
                 this.UpdateDrives(this, e);
         }
-
-        private void listBoxItems_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            List<string> allItems = new List<string>();
-            allItems = Items;         
-            string path = CurrentPath;
-           
-
-            foreach(string item in allItems)
-            {
-                if(path.EndsWith(item))
-                {
-                    path = path.Remove(path.Length-item.Length,item.Length);
-                }
-            }
-
-            path += listBoxItems.SelectedItem.ToString();
-            CurrentPath = path;
-        }
+        #endregion
     }
 }

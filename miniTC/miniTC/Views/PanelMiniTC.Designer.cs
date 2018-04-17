@@ -49,15 +49,16 @@
             this.textBoxPath.Location = new System.Drawing.Point(38, 18);
             this.textBoxPath.Name = "textBoxPath";
             this.textBoxPath.ReadOnly = true;
-            this.textBoxPath.Size = new System.Drawing.Size(299, 20);
+            this.textBoxPath.Size = new System.Drawing.Size(291, 20);
             this.textBoxPath.TabIndex = 1;
             // 
             // comboBoxDrives
             // 
+            this.comboBoxDrives.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxDrives.FormattingEnabled = true;
-            this.comboBoxDrives.Location = new System.Drawing.Point(343, 18);
+            this.comboBoxDrives.Location = new System.Drawing.Point(335, 18);
             this.comboBoxDrives.Name = "comboBoxDrives";
-            this.comboBoxDrives.Size = new System.Drawing.Size(37, 21);
+            this.comboBoxDrives.Size = new System.Drawing.Size(45, 21);
             this.comboBoxDrives.TabIndex = 2;
             this.comboBoxDrives.SelectedIndexChanged += new System.EventHandler(this.comboBoxDrives_SelectedIndexChanged);
             this.comboBoxDrives.Click += new System.EventHandler(this.comboBoxDrives_Click);
@@ -69,7 +70,6 @@
             this.listBoxItems.Name = "listBoxItems";
             this.listBoxItems.Size = new System.Drawing.Size(377, 446);
             this.listBoxItems.TabIndex = 3;
-            this.listBoxItems.SelectedIndexChanged += new System.EventHandler(this.listBoxItems_SelectedIndexChanged);
             this.listBoxItems.DoubleClick += new System.EventHandler(this.listBoxItems_DoubleClick);
             // 
             // PanelMiniTC

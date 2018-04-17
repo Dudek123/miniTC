@@ -11,6 +11,9 @@ namespace miniTC.Views
         event Func<List<string>> GetDrives;
         event Func<string, List<string>> GetItems;
         event Func<string, string> GetPreviousFolder;
+        event Func<string, string, bool> CopyFile;
+        event Func<string, string, bool> MoveFile;
+        event Func<string, bool> DeleteFile;
 
         List<string> Drives { get; set; }
         List<string> ItemsLeft { get; set; }
