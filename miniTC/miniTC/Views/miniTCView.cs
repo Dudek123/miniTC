@@ -12,7 +12,9 @@ namespace miniTC
 {
     public partial class miniTCView : Form, Views.IViewTC
     {
+        #region POLA WIDOKU
         private bool activePanel; //true - Lewy panel aktywny , false - Prawy panel aktywny
+        #endregion
 
         #region KONSTRUKTOR
         public miniTCView()
@@ -107,16 +109,17 @@ namespace miniTC
         public event Func<string, string, bool> CopyFile;
         public event Func<string, string, bool> MoveFile;
         public event Func<string, bool> DeleteFile;
+        public event Func<string, bool> OpenFile;
         #endregion
 
         #region METODY PANELU
         private void miniTCPanel_GetPreviousFolder(object sender, EventArgs e)
         {
-            if(((Views.PanelMiniTC)sender).CurrentPath.ToString().Length > 3)
+            if (((Views.PanelMiniTC)sender).CurrentPath.ToString().Length > 3)
             {
                 ((Views.PanelMiniTC)sender).CurrentPath = GetPreviousFolder(((Views.PanelMiniTC)sender).CurrentPath);
                 ((Views.PanelMiniTC)sender).Items = GetItems(((Views.PanelMiniTC)sender).CurrentPath);
-            } 
+            }
         }
 
         private void miniTCPanel_UpdateDrives(object sender, EventArgs e)
@@ -126,19 +129,30 @@ namespace miniTC
 
         private void miniTCPanel_ListBoxDoubleClick(object sender, EventArgs e)
         {
-            if(((Views.PanelMiniTC)sender).IsSelectedItem)
+            if (((Views.PanelMiniTC)sender).IsSelectedItem)
             {
-                ((Views.PanelMiniTC)sender).CurrentPath = ((Views.PanelMiniTC)sender).CurrentPath + ((Views.PanelMiniTC)sender).SelectedItem;
-                ((Views.PanelMiniTC)sender).Items = GetItems(((Views.PanelMiniTC)sender).CurrentPath);
-            }        
+                if ((((Views.PanelMiniTC)sender).CurrentPath + ((Views.PanelMiniTC)sender).SelectedItem).EndsWith("\\"))
+                {
+                    ((Views.PanelMiniTC)sender).CurrentPath = ((Views.PanelMiniTC)sender).CurrentPath + ((Views.PanelMiniTC)sender).SelectedItem;
+                    ((Views.PanelMiniTC)sender).Items = GetItems(((Views.PanelMiniTC)sender).CurrentPath);
+                }
+                else
+                {
+                    OpenFile((((Views.PanelMiniTC)sender).CurrentPath + ((Views.PanelMiniTC)sender).SelectedItem));
+                }
+            }
         }
 
         private void miniTCPanel_ComboBoxDrivesSelectedIndexChanged(object sender, EventArgs e)
         {
             ((Views.PanelMiniTC)sender).Items = GetItems(((Views.PanelMiniTC)sender).CurrentPath);
-            buttonCopy.Enabled = true;
-            buttonMove.Enabled = true;
-            buttonDelete.Enabled = true;
+            if (panelMiniTCLeft.CurrentPath.Length >= 3 && panelMiniTCRight.CurrentPath.Length >= 3)
+            {
+                buttonCopy.Enabled = true;
+                buttonMove.Enabled = true;
+            }
+            if (panelMiniTCLeft.CurrentPath.Length >= 3 || panelMiniTCRight.CurrentPath.Length >= 3)
+                buttonDelete.Enabled = true;
         }
         #endregion
 

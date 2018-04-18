@@ -24,7 +24,9 @@ namespace miniTC.Presenters
             view.CopyFile += copyFile;
             view.MoveFile += moveFile;
             view.DeleteFile += deleteFile;
+            view.OpenFile += openFile;
         }
+
         #endregion
 
         #region METODY PREZENTERA
@@ -56,6 +58,11 @@ namespace miniTC.Presenters
         private List<string> getItems(string path)
         {
             return model.GetItems(path);
+        }
+
+        private bool openFile(string path)
+        {
+            return model.openFile(path);
         }
         #endregion
     }

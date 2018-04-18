@@ -145,6 +145,11 @@ namespace miniTC.Models
             PreviousPath = path;
             return PreviousPath;
         }
+
+        public bool openFile(string path)
+        {
+            return OpenFile(path);
+        }
         #endregion
 
         #region METODY PRYWATNE MODELU
@@ -168,6 +173,11 @@ namespace miniTC.Models
             if(source == "" || dest == "") // puste ścieżki
             {
                 System.Windows.Forms.MessageBox.Show("Wybierz co i gdzie chcesz skopiować");
+                return false;
+            }
+            if(source == dest)
+            {
+                System.Windows.Forms.MessageBox.Show("Nie kopiuje się do siebie samego!!");
                 return false;
             }
             string sourceName;
@@ -247,6 +257,12 @@ namespace miniTC.Models
             if (arg1 == "" || arg2 == "") // puste ścieżki
             {
                 System.Windows.Forms.MessageBox.Show("Wybierz co i gdzie chcesz przenieść");
+                return false;
+            }
+
+            if (arg1 == arg2)
+            {
+                System.Windows.Forms.MessageBox.Show("Nie przenosi się do siebie samego!!");
                 return false;
             }
 
@@ -343,6 +359,20 @@ namespace miniTC.Models
                 System.Windows.Forms.MessageBox.Show("Nie ma takiego pliku ani katalogu");
                 return false;
             }    
+        }
+
+        private bool OpenFile(string path)
+        {
+            try
+            {
+                System.Diagnostics.Process.Start(path);
+                return true;
+            }
+            catch(UnauthorizedAccessException)
+            {
+                System.Windows.Forms.MessageBox.Show("Brak uprawanień");
+                return false;
+            }
         }
         #endregion
     }
