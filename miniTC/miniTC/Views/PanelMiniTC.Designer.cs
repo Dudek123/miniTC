@@ -36,16 +36,18 @@
             // 
             // buttonBack
             // 
+            this.buttonBack.BackColor = System.Drawing.Color.Beige;
             this.buttonBack.Location = new System.Drawing.Point(3, 17);
             this.buttonBack.Name = "buttonBack";
             this.buttonBack.Size = new System.Drawing.Size(29, 20);
             this.buttonBack.TabIndex = 0;
             this.buttonBack.Text = "<-";
-            this.buttonBack.UseVisualStyleBackColor = true;
+            this.buttonBack.UseVisualStyleBackColor = false;
             this.buttonBack.Click += new System.EventHandler(this.buttonBack_Click);
             // 
             // textBoxPath
             // 
+            this.textBoxPath.BackColor = System.Drawing.Color.Beige;
             this.textBoxPath.Location = new System.Drawing.Point(38, 18);
             this.textBoxPath.Name = "textBoxPath";
             this.textBoxPath.ReadOnly = true;
@@ -54,6 +56,7 @@
             // 
             // comboBoxDrives
             // 
+            this.comboBoxDrives.BackColor = System.Drawing.Color.Beige;
             this.comboBoxDrives.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxDrives.FormattingEnabled = true;
             this.comboBoxDrives.Location = new System.Drawing.Point(335, 18);
@@ -65,6 +68,7 @@
             // 
             // listBoxItems
             // 
+            this.listBoxItems.BackColor = System.Drawing.Color.Beige;
             this.listBoxItems.FormattingEnabled = true;
             this.listBoxItems.Location = new System.Drawing.Point(3, 44);
             this.listBoxItems.Name = "listBoxItems";

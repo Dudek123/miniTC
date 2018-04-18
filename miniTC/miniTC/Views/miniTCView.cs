@@ -165,16 +165,16 @@ namespace miniTC
         private void panelMiniTCLeft_Click(object sender, EventArgs e)
         {
             activePanel = true;
-            panelMiniTCLeft.BackColor = Color.Magenta;
-            panelMiniTCRight.BackColor = Color.LightGreen;
+            panelMiniTCLeft.BackColor = Color.MidnightBlue;
+            panelMiniTCRight.BackColor = Color.DarkViolet;
             labelDirection.Text = "-------->";
         }
 
         private void panelMiniTCRight_Click(object sender, EventArgs e)
         {
             activePanel = false;
-            panelMiniTCLeft.BackColor = Color.LightGreen;
-            panelMiniTCRight.BackColor = Color.Magenta;
+            panelMiniTCLeft.BackColor = Color.DarkViolet;
+            panelMiniTCRight.BackColor = Color.MidnightBlue;
             labelDirection.Text = "<--------";
         }
 

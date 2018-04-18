@@ -108,7 +108,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.LightGreen;
+            this.BackColor = System.Drawing.Color.DarkViolet;
             this.ClientSize = new System.Drawing.Size(874, 513);
             this.Controls.Add(this.labelDirection);
             this.Controls.Add(this.buttonMove);
